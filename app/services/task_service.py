@@ -3,12 +3,9 @@ from dataclasses import replace
 from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskUpdate
 from app.storage.task_storage import TaskStorage
+from app.exceptions import TaskNotFoundError
 
 
-class TaskNotFoundError(Exception):
-    def __init__(self, task_id: int) -> None:
-        super().__init__(f"Task with id {task_id} was not found.")
-        self.task_id = task_id
 
 
 class TaskService:
