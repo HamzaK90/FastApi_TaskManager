@@ -14,7 +14,7 @@ class TaskUpdate(BaseModel):
     # A default of None means "not sent". Sending null is still rejected.
     title: str = Field(default=None, min_length=1, max_length=100)
     description: str = Field(default=None, max_length=500)
-    done: bool = Field(default=None)
+    completed: bool = Field(default=None) 
 
 
 class TaskResponse(BaseModel):
@@ -23,4 +23,4 @@ class TaskResponse(BaseModel):
     id: int
     title: str
     description: str
-    done: bool
+    completed: bool 
