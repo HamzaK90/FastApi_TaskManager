@@ -27,6 +27,8 @@ explain analyze select * from tasks where user_id = 5;
 
 delete from tasks where id > 13;
 
+drop index idx_tasks_user_id on tasks;
+
 alter table tasks
     add constraint fk_tasks_user
     foreign key (user_id) references users (id)
