@@ -12,7 +12,8 @@ from app.models import task  # noqa: F401
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.database_url.replace("%", "%%"))
+database_url = config.attributes.get("database_url", settings.database_url)
+config.set_main_option("sqlalchemy.url", database_url.replace("%", "%%"))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
