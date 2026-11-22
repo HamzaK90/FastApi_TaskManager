@@ -8,7 +8,7 @@ from app.database import Base
 
 if TYPE_CHECKING:
     from app.models.user import User
-
+    from app.models.tag import Tag
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -21,3 +21,4 @@ class Task(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     user: Mapped["User"] = relationship(back_populates="tasks")
+    tags: Mapped[list["Tag"]] = relationship(secondary="task_tags", back_populates="tasks")
