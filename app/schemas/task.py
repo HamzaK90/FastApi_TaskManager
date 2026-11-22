@@ -6,7 +6,8 @@ class TaskCreate(BaseModel):
 
     title: str = Field(min_length=1, max_length=100)
     description: str = Field(default="", max_length=500)
-
+    user_id: int = Field(gt=0)
+    
 
 class TaskUpdate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
@@ -23,3 +24,5 @@ class TaskResponse(BaseModel):
     title: str
     description: str
     completed: bool 
+    user_id: int
+    
