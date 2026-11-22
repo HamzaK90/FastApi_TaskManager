@@ -36,4 +36,14 @@ def client() -> Iterator[TestClient]:
     app.dependency_overrides.clear()
 
     with test_engine.begin() as connection:
+        connection.execute(text("delete from task_tags"))
         connection.execute(text("delete from tasks"))
+        connection.execute(text("delete from tags"))
+        connection.execute(text("delete from users"))
+
+
+@pytest.fixture
+def user_id(client: TestClient) -> int:
+    response = client.post("/users", json={"name": "Sara Haddad", "email": "sara@example.com"})
+    assert response.status_code == 201
+    return response.json()["id"]
