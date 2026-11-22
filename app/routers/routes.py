@@ -1,8 +1,11 @@
-from fastapi import APIRouter, status
+from typing import Annotated
+
+from fastapi import APIRouter, Query, status
+
 
 from app.dependencies.task_dependencies import TaskServiceDep
 from app.models.task import Task
-from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
+from app.schemas.task import TaskCreate, TaskFilters, TaskResponse, TaskUpdate
 from app.schemas.tag import TagsAdd
 
 
@@ -17,8 +20,8 @@ def create_task(data: TaskCreate, service: TaskServiceDep) -> Task:
 
 
 @router.get("", response_model=list[TaskResponse])
-def list_tasks(service: TaskServiceDep) -> list[Task]:
-    return service.list_tasks()
+def list_tasks(filters: Annotated[TaskFilters, Query()], service: TaskServiceDep) -> list[Task]:
+    return service.list_tasks(filters)
 
 
 @router.get("/{task_id}", response_model=TaskResponse, responses=TASK_NOT_FOUND)

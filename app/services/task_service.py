@@ -1,11 +1,11 @@
 from app.exceptions import TaskNotFoundError, UserNotFoundError
 from app.models.task import Task
-from app.schemas.task import TaskCreate, TaskUpdate
+from app.schemas.task import TaskCreate, TaskFilters, TaskUpdate
 from app.storage.task_storage import TaskStorage
 from app.storage.user_storage import UserStorage
 from app.schemas.tag import TagsAdd
 from app.storage.tag_storage import TagStorage
-
+from app.storage.task_query_builder import TaskQueryBuilder
 
 
 class TaskService:
@@ -25,8 +25,15 @@ class TaskService:
         )
         return self._storage.add(task)
 
-    def list_tasks(self) -> list[Task]:
-        return self._storage.list_all()
+    def list_tasks(self, filters: TaskFilters) -> list[Task]:
+        query = (
+            TaskQueryBuilder()
+            .with_status(filters.status)
+            .with_tag(filters.tag)
+            .with_search(filters.search)
+            .build()
+        )
+        return self._storage.find(query)
 
     def get_task(self, task_id: int) -> Task:
         task = self._storage.get(task_id)
