@@ -21,4 +21,5 @@ class User(Base):
     tasks: Mapped[list["Task"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
+        order_by="Task.id",
     )

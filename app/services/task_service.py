@@ -1,15 +1,20 @@
-from app.exceptions import TaskNotFoundError
+from app.exceptions import TaskNotFoundError, UserNotFoundError
 from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskUpdate
 from app.storage.task_storage import TaskStorage
+from app.storage.user_storage import UserStorage
+
 
 
 class TaskService:
-    def __init__(self, storage: TaskStorage) -> None:
+    def __init__(self, storage: TaskStorage, user_storage: UserStorage) -> None:
         self._storage = storage
+        self._user_storage = user_storage
 
     def create_task(self, data: TaskCreate) -> Task:
-        task = Task(title=data.title, description=data.description)
+        if self._user_storage.get(data.user_id) is None:
+            raise UserNotFoundError(data.user_id)
+        task = Task(user_id=data.user_id, title=data.title, description=data.description)
         return self._storage.add(task)
 
     def list_tasks(self) -> list[Task]:
