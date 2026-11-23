@@ -1,6 +1,7 @@
 from typing import Literal, Self
 
 from sqlalchemy import Select, or_, select
+from sqlalchemy.orm import selectinload
 
 from app.models.tag import Tag
 from app.models.task import Task
@@ -31,4 +32,4 @@ class TaskQueryBuilder:
         return self
 
     def build(self) -> Select[tuple[Task]]:
-        return self._query.order_by(Task.id)
+        return self._query.options(selectinload(Task.tags)).order_by(Task.id)
